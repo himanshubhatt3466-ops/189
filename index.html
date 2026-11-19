@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b35">
+<title>Manas College | Review Assistant</title>
+<style>
+:root{--navy:#101b35;--blue:#244b91;--gold:#f5b942;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:25px 14px;font-family:Inter,Segoe UI,Arial,sans-serif;color:#172033;background:radial-gradient(circle at 10% 5%,#dce9ff 0,transparent 35%),linear-gradient(135deg,#f4f7fc,#e9eef8)}
+.wrap{max-width:650px;margin:auto}.brand{text-align:center;margin:8px 0 20px}.mark{width:54px;height:54px;margin:0 auto 12px;border-radius:17px;background:linear-gradient(135deg,#274d91,#13264c);color:white;display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:0 10px 25px #1e3a8a33}.brand h1{margin:0;color:var(--navy);font-size:25px}.brand p{margin:7px 0;color:var(--muted);font-size:14px}
+.panel{background:#fff;border:1px solid #ffffffb8;border-radius:22px;padding:24px;box-shadow:0 18px 55px #1e3a8a12}.section{margin:0 0 20px}.label{display:block;font-weight:700;font-size:14px;margin-bottom:10px;color:#24324a}.stars{display:flex;gap:8px}.star{border:0;background:#f1f5f9;color:#c0cad8;border-radius:12px;width:47px;height:43px;font-size:25px;cursor:pointer}.star.active{background:#fff6dc;color:#e7a51d}.chips{display:flex;flex-wrap:wrap;gap:9px}.chip{border:1px solid var(--line);background:#f8fafc;color:#34435c;border-radius:999px;padding:10px 13px;font-size:13px;cursor:pointer}.chip.selected{background:#eaf1ff;border-color:#7899d5;color:#183d7b;font-weight:700}input,select,textarea{width:100%;border:1px solid #d7dfeb;border-radius:11px;padding:12px 13px;font:inherit;color:#172033;background:white;outline:none}input:focus,select:focus,textarea:focus{border-color:#557cbd;box-shadow:0 0 0 3px #557cbd18}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.hint{font-size:12px;color:var(--muted);line-height:1.5;margin:8px 0 0}.btn{width:100%;border:0;border-radius:12px;padding:14px 16px;font-weight:750;font-size:15px;cursor:pointer;margin-top:10px}.primary{background:linear-gradient(135deg,#244b91,#142b56);color:white;box-shadow:0 8px 20px #1e3a8a2a}.secondary{background:#edf2fa;color:#1d3765}.google{background:#16834b;color:#fff}.btn:disabled{opacity:.6;cursor:wait}.result{display:none;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}.result.visible{display:block}.result textarea{min-height:145px;line-height:1.6;resize:vertical}.status{display:none;margin-top:13px;padding:11px 13px;border-radius:10px;font-size:13px}.status.show{display:block}.status.error{background:#fff0f0;color:#a12626}.status.success{background:#eaf8ef;color:#17643a}.footer{text-align:center;color:#8290a5;font-size:12px;margin:18px 0}.disclaimer{font-size:12px;color:#64748b;line-height:1.5;margin-top:15px}
+@media(max-width:520px){body{padding:18px 12px}.panel{padding:19px;border-radius:18px}.grid{grid-template-columns:1fr}.brand h1{font-size:22px}}
+</style></head>
+<body><main class="wrap">
+<header class="brand"><div class="mark">MC</div><h1>Manas College</h1><p>Share your genuine experience with us</p></header>
+<section class="panel">
+<div class="section"><span class="label">Your rating</span><div class="stars" id="stars">
+<button class="star active" data-rating="1">★</button><button class="star active" data-rating="2">★</button><button class="star active" data-rating="3">★</button><button class="star active" data-rating="4">★</button><button class="star active" data-rating="5">★</button>
+</div></div>
+<div class="section"><span class="label">What did you genuinely appreciate?</span><div class="chips" id="chips">
+<button class="chip">Helpful Faculty</button><button class="chip">Teaching Quality</button><button class="chip">Friendly Environment</button><button class="chip">Practical Learning</button><button class="chip">Library</button><button class="chip">Discipline & Safety</button><button class="chip">Campus Facilities</button><button class="chip">Student Support</button>
+</div></div>
+<div class="section"><label class="label" for="customNote">Add a detail (optional)</label><input id="customNote" maxlength="300" placeholder="e.g. BCA department, a helpful teacher, an event..."></div>
+<div class="grid section"><div><label class="label" for="language">Language</label><select id="language"><option>English</option><option>Hinglish</option><option>Simple English</option></select></div><div><label class="label" for="length">Review length</label><select id="length"><option value="short">Short</option><option value="medium" selected>Medium</option><option value="long">Detailed</option></select></div></div>
+<button class="btn primary" id="generate">✨ Generate review draft</button><div class="status" id="status" role="status"></div>
+<div class="result" id="result"><label class="label" for="reviewText">Review draft — edit it to match your real experience</label><textarea id="reviewText" maxlength="1200"></textarea><button class="btn secondary" id="regenerate">↻ Generate another version</button><button class="btn google" id="copyOpen">Copy & Open Google Review</button><p class="hint">Text will be copied and the college Google Review page will open. Paste it there and submit it yourself.</p></div>
+<p class="disclaimer">This tool creates a draft from details you provide. Please post only an honest review based on your own experience. It does not submit reviews automatically.</p>
+</section><footer class="footer">Manas College · Review Assistant</footer></main>
+<script>
+/*
+  IMPORTANT: Paste your deployed Google Apps Script Web App URL below.
+  The Gemini API key stays inside Apps Script Properties, never in this HTML.
+*/
+const APPS_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_REVIEW_URL = "https://g.page/r/Cbv2QStXe7pUEBM/review";
+let selectedRating=5;
+const $=id=>document.getElementById(id);
+const selectedKeywords=()=>[...document.querySelectorAll(".chip.selected")].map(x=>x.textContent.trim());
+document.querySelectorAll(".star").forEach(b=>b.addEventListener("click",()=>{selectedRating=Number(b.dataset.rating);document.querySelectorAll(".star").forEach(s=>s.classList.toggle("active",Number(s.dataset.rating)<=selectedRating));}));
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>c.classList.toggle("selected")));
+function status(message,type){$("status").textContent=message;$("status").className="status show "+type;}
+function callAppsScript(params){
+ return new Promise((resolve,reject)=>{
+  if(!APPS_SCRIPT_URL.startsWith("https://script.google.com/")) return reject(new Error("Apps Script URL is not configured. Follow README setup."));
+  const callback="reviewCallback_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  const script=document.createElement("script");
+  const timeout=setTimeout(()=>{cleanup();reject(new Error("Request timed out. Please try again."));},45000);
+  function cleanup(){clearTimeout(timeout);delete window[callback];script.remove();}
+  window[callback]=(data)=>{cleanup();if(data&&data.error)reject(new Error(data.error));else resolve(data);};
+  const query=new URLSearchParams({...params,callback});
+  script.onerror=()=>{cleanup();reject(new Error("Could not connect to the review service. Check the Apps Script deployment URL."));};
+  script.src=APPS_SCRIPT_URL+"?"+query.toString();document.body.appendChild(script);
+ });
+}
+async function generate(){
+ const keywords=selectedKeywords(),customNote=$("customNote").value.trim();
+ if(!keywords.length&&!customNote){status("Please choose at least one highlight or add a short detail.","error");return;}
+ $("generate").disabled=true;$("regenerate").disabled=true;$("generate").textContent="⏳ Creating your draft...";
+ try{
+  const data=await callAppsScript({action:"generate",keywords:keywords.join("|"),customNote,rating:selectedRating,language:$("language").value,length:$("length").value});
+  $("reviewText").value=data.review;$("result").classList.add("visible");status("Draft generated. Please check and edit it before posting.","success");
+ }catch(e){status(e.message,"error");}
+ finally{$("generate").disabled=false;$("regenerate").disabled=false;$("generate").textContent="✨ Generate review draft";}
+}
+$("generate").addEventListener("click",generate);$("regenerate").addEventListener("click",generate);
+$("copyOpen").addEventListener("click",async()=>{
+ const review=$("reviewText").value.trim();if(!review)return status("Generate a review first.","error");
+ try{await navigator.clipboard.writeText(review);status("Review copied. Paste it on Google and submit it yourself.","success");window.open(GOOGLE_REVIEW_URL,"_blank","noopener,noreferrer");}
+ catch(e){$("reviewText").focus();$("reviewText").select();status("Copy was blocked. Copy the selected text, then open Google Review.","error");window.open(GOOGLE_REVIEW_URL,"_blank","noopener,noreferrer");}
+});
+</script></body></html>
